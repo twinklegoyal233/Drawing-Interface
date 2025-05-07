@@ -1122,7 +1122,7 @@ return ( <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-
       initial={{ opacity: 0, scale: 0.9, x: 50 }}
       animate={{ opacity: 1, scale: 1, x: 70 }}
       exit={{ opacity: 0, scale: 0.9, x: 50 }}
-      className=" absolute ml-4 top-0 z-20 w-56 bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 overflow-hidden"
+      className=" absolute ml-4 -top-8 md:top-0 z-20 w-56 bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 overflow-hidden"
     >
       {/* Header with gradient */}
       <div className="bg-gradient-to-r from-blue-600/40 to-indigo-700/40 px-4 py-3 border-b border-white/20">
