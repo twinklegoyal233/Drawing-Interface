@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Define our TypeScript types
@@ -120,85 +120,65 @@ useEffect(() => {
     ]);
   }, []);
   
-  const compositeCanvases = useCallback(() => {
-    if (!displayCanvasRef.current) return;
-    
-    const displayCtx = displayCanvasRef.current.getContext('2d');
-    if (!displayCtx) return;
-    
-    // Clear the display canvas
-    displayCtx.clearRect(0, 0, displayCanvasRef.current.width, displayCanvasRef.current.height);
-    
-    // Composite all visible layers in order
-    layers.forEach(layer => {
-      if (layer.visible && layer.canvas) {
-        displayCtx.drawImage(layer.canvas, 0, 0);
-      }
-    });
-    
-    // Draw the temp canvas on top if it exists
-    if (tempCanvasRef.current) {
-      displayCtx.drawImage(tempCanvasRef.current, 0, 0);
-    }
-  }, [layers]);
-
 // Add this useEffect hook to initialize canvases after mounting
 useEffect(() => {
-  if (!showLanding && displayCanvasRef.current) {
-    const containerWidth = displayCanvasRef.current.parentElement?.clientWidth || 800;
-    const containerHeight = displayCanvasRef.current.parentElement?.clientHeight || 600;
-    
-    // Set display canvas dimensions
-    displayCanvasRef.current.width = containerWidth;
-    displayCanvasRef.current.height = containerHeight;
-    
-    // Initialize all layer canvases with same dimensions
-    const updatedLayers = layers.map(layer => {
-      if (layer.canvas) {
-        layer.canvas.width = containerWidth;
-        layer.canvas.height = containerHeight;
-      }
-      return layer;
-    });
-    
-    setLayers(updatedLayers);
-    compositeCanvases();
-  }
-}, [showLanding, layers, compositeCanvases]);
-
-// // Add this effect to handle window resize
-useEffect(() => {
-  const handleResize = () => {
-    if (!displayCanvasRef.current || showLanding) return;
-    
-    const containerWidth = displayCanvasRef.current.parentElement?.clientWidth || 800;
-    const containerHeight = displayCanvasRef.current.parentElement?.clientHeight || 600;
-    
-    // Update display canvas dimensions
-    displayCanvasRef.current.width = containerWidth;
-    displayCanvasRef.current.height = containerHeight;
-    
-    // Update all layer canvases with same dimensions
-    layers.forEach(layer => {
-      if (layer.canvas) {
-        const ctx = layer.canvas.getContext('2d');
-        const imageData = ctx?.getImageData(0, 0, layer.canvas.width, layer.canvas.height);
-        
-        layer.canvas.width = containerWidth;
-        layer.canvas.height = containerHeight;
-        
-        if (ctx && imageData) {
-          ctx.putImageData(imageData, 0, 0);
+    if (!showLanding && displayCanvasRef.current) {
+      const containerWidth = displayCanvasRef.current.parentElement?.clientWidth || 800;
+      const containerHeight = displayCanvasRef.current.parentElement?.clientHeight || 600;
+      
+      // Set display canvas dimensions
+      displayCanvasRef.current.width = containerWidth;
+      displayCanvasRef.current.height = containerHeight;
+      
+      // Initialize all layer canvases with same dimensions
+      const updatedLayers = layers.map(layer => {
+        if (layer.canvas) {
+          layer.canvas.width = containerWidth;
+          layer.canvas.height = containerHeight;
         }
-      }
-    });
-    
-    compositeCanvases();
-  };
+        return layer;
+      });
+      
+      setLayers(updatedLayers);
+      compositeCanvases();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showLanding]);
   
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, [layers, showLanding, compositeCanvases]);
+  // Add this effect to handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (!displayCanvasRef.current || showLanding) return;
+      
+      const containerWidth = displayCanvasRef.current.parentElement?.clientWidth || 800;
+      const containerHeight = displayCanvasRef.current.parentElement?.clientHeight || 600;
+      
+      // Update display canvas dimensions
+      displayCanvasRef.current.width = containerWidth;
+      displayCanvasRef.current.height = containerHeight;
+      
+      // Update all layer canvases with same dimensions
+      layers.forEach(layer => {
+        if (layer.canvas) {
+          const ctx = layer.canvas.getContext('2d');
+          const imageData = ctx?.getImageData(0, 0, layer.canvas.width, layer.canvas.height);
+          
+          layer.canvas.width = containerWidth;
+          layer.canvas.height = containerHeight;
+          
+          if (ctx && imageData) {
+            ctx.putImageData(imageData, 0, 0);
+          }
+        }
+      });
+      
+      compositeCanvases();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layers, showLanding]);
 
 // Color palette
 const colorPalette = [
@@ -501,7 +481,27 @@ const createTempCanvas = () => {
   tempCanvasRef.current = tempCanvas;
 };
 
-
+const compositeCanvases = () => {
+  if (!displayCanvasRef.current) return;
+  
+  const displayCtx = displayCanvasRef.current.getContext('2d');
+  if (!displayCtx) return;
+  
+  // Clear the display canvas
+  displayCtx.clearRect(0, 0, displayCanvasRef.current.width, displayCanvasRef.current.height);
+  
+  // Composite all visible layers in order
+  layers.forEach(layer => {
+    if (layer.visible && layer.canvas) {
+      displayCtx.drawImage(layer.canvas, 0, 0);
+    }
+  });
+  
+  // Draw the temp canvas on top if it exists
+  if (tempCanvasRef.current) {
+    displayCtx.drawImage(tempCanvasRef.current, 0, 0);
+  }
+};
 
 const saveCurrentStateForUndo = () => {
   const currentLayer = layers.find(layer => layer.id === activeLayer);
