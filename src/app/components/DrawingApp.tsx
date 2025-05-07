@@ -184,8 +184,8 @@ useEffect(() => {
 const colorPalette = [
 '#000000', '#FFFFFF', '#FF0000', '#FFA500',
 '#FFFF00', '#008000', '#0000FF', '#4B0082',
-'#EE82EE', '#800000', '#808000', '#008080',
-'#000080', '#800080', '#FFC0CB', '#A52A2A'
+'#EE82EE', '#800000'
+
 ];
 
 
@@ -1122,7 +1122,7 @@ return ( <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-
       initial={{ opacity: 0, scale: 0.9, x: 50 }}
       animate={{ opacity: 1, scale: 1, x: 70 }}
       exit={{ opacity: 0, scale: 0.9, x: 50 }}
-      className="absolute ml-4 top-0 z-20 w-56 bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 overflow-hidden"
+      className=" absolute ml-4 top-0 z-20 w-56 bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 overflow-hidden"
     >
       {/* Header with gradient */}
       <div className="bg-gradient-to-r from-blue-600/40 to-indigo-700/40 px-4 py-3 border-b border-white/20">
@@ -1166,7 +1166,7 @@ return ( <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-
         </div>
         
         {/* Recent colors section */}
-        <div className="mb-4">
+        <div className="mb-4 md:block hidden">
           <div className="flex items-center mb-2">
             <div className="w-1 h-4 bg-blue-400 rounded mr-2"></div>
             <h4 className="text-white font-medium text-xs">Recent Colors</h4>
@@ -1186,8 +1186,8 @@ return ( <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-
         </div>
         
         {/* Custom color picker with improved styling */}
-        <div>
-          <div className="flex items-center mb-2">
+        <div className='hidden md:block'>
+          <div className="flex items-center mb-2 md:block">
             <div className="w-1 h-4 bg-blue-400 rounded mr-2"></div>
             <h4 className="text-white font-medium text-xs">Custom Color</h4>
           </div>
